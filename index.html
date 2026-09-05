@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Panget</title>
+<style>
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+html, body {
+    touch-action: manipulation;
+}
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: #000000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    gap: 40px;
+    padding: 60px 0 40px;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+#envelope-wrapper {
+    position: relative;
+    width: 280px;
+    height: 320px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    perspective: 800px;
+}
+
+#envelope {
+    position: relative;
+    width: 280px;
+    height: 180px;
+}
+
+
+.body-panel {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    height: 180px;
+    background-color: #10207d;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+    z-index: 1;
+    overflow: hidden;
+}
+
+
+.body-panel::before,
+.body-panel::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+.body-panel::before {
+    left: 0;
+    border-width: 0 0 180px 140px;
+    border-color: transparent transparent #16297f transparent;
+}
+.body-panel::after {
+    right: 0;
+    border-width: 180px 140px 0 0;
+    border-color: transparent #16297f transparent transparent;
+}
+
+.letter {
+    position: absolute;
+    left: 20px;
+    bottom: 14px;
+    width: 240px;
+    min-height: 140px;
+    background: #fdfdfd;
+    border-radius: 6px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+    padding: 16px 18px;
+    font-size: 13px;
+    color: #10207d;
+    line-height: 1.6;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(0) scale(0.92);
+    transform-origin: bottom center;
+    transition: transform 0.55s cubic-bezier(.34,1.56,.64,1) 0.35s,
+                opacity 0.4s ease 0.35s;
+    pointer-events: none;
+}
+
+#envelope.open .letter {
+    opacity: 1;
+    transform: translateY(-170px) scale(1);
+}
+
+.letter .to {
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.letter .msg {
+    font-style: italic;
+}
+
+.front-pocket {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 140px 95px 140px;
+    border-color: transparent transparent #1b34c4 transparent;
+    z-index: 3;
+}
+
+
+.flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 140px solid transparent;
+    border-right: 140px solid transparent;
+    border-top: 110px solid #3358f2;
+    transform-origin: top center;
+    transform: rotateX(0deg);
+    transition: transform 0.5s ease;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
+    z-index: 4;
+}
+
+#envelope.open .flap {
+    transform: rotateX(-160deg);
+    z-index: 0; 
+}
+
+.hearts {
+    position: absolute;
+    left: 50%;
+    top: 40px;
+    transform: translateX(-50%);
+    font-size: 22px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 5;
+}
+
+#envelope.open .hearts {
+    animation: floatHearts 1.4s ease-in forwards;
+    animation-delay: 0.55s;
+}
+
+@keyframes floatHearts {
+    0%   { opacity: 0; transform: translate(-50%, 0) scale(0.6); }
+    30%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%, -90px) scale(1.2); }
+}
+
+.buttons {
+    display: flex;
+    gap: 16px;
+}
+
+button {
+    padding: 12px 24px;
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 8px;
+    border: 2px solid #3358f2;
+    background: transparent;
+    color: #3358f2;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    font-size: 14px;
+    touch-action: manipulation;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+button:hover,
+button:active {
+    background: #3358f2;
+    color: #ffffff;
+}
+</style>
+</head>
+<body>
+    <div id="envelope-wrapper"></div>
+    <div id="envelope">
+        <div class = "body-panel"></div>
+        <div class = "letter">
+            <div class = "to">To:Jana</div>
+            <div class = "msg">Dear Jana, Panget ka.<br>
+                Jok Thankyou for being my friend,<br>
+                miss you panget.<br>
+                -migul
+            </div>
+        </div>
+        <div class = "front-pocket"></div>
+        <div class = "flap"></div>
+        <div class = "hearts"></div>
+        </div>
+    </div>
+
+    <div class = "buttons">
+        <button id = "openBtn">OPEN PANGET</button>
+        <button id = "closeBtn">CLOSE PANGET</button>
+    </div>
+
+    <script>
+        var envelope = 
+        document.getElementById('envelope');
+        var openBtn =
+        document.getElementById('openBtn');
+        var closeBtn =
+        document.getElementById('closeBtn');
+
+        function openEnvelope(e){
+            e.preventDefault();
+            envelope.classList.add('open');
+        }
+        function closeEnvelope(e){
+            e.preventDefault();
+            envelope.classList.remove('open');
+        }
+
+        openBtn.addEventListener('click',openEnvelope);
+        closeBtn.addEventListener('click',closeEnvelope);
+        openBtn.addEventListener('touchend',
+            openEnvelope,{passive:false});
+            closeBtn.addEventListener('touchend',
+                closeEnvelope,{passive:false});
+    </script>
+</body>
+</html>
